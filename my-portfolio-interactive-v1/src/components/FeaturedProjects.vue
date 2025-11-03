@@ -4,46 +4,43 @@
         <div class="max-w-[1800px] mx-auto">
             <!-- Section Title -->
             <div ref="titleRef" class="mb-24">
-                <span class="text-[#111111]/40 uppercase tracking-[0.3em]" style="font-size: 0.875rem;">
+                <span class="text-[#111111]/40 uppercase tracking-[0.3em] text-[0.875rem]">
                     Selected Work
                 </span>
-                <h2 class="text-[#111111] mt-4" :style="{
-                    fontSize: 'clamp(2.5rem, 6vw, 6rem)',
-                    lineHeight: '1',
-                    letterSpacing: '-0.02em',
-                }">
+                <h2 class="text-[#111111] mt-4" style="
+            font-size: clamp(2.5rem, 6vw, 6rem);
+            line-height: 1;
+            letter-spacing: -0.02em;
+          ">
                     Featured Projects
                 </h2>
             </div>
 
             <!-- Projects List -->
             <div class="space-y-0">
-                <div v-for="(project, index) in projects" :key="project.id" ref="projectItemRefs"
+                <div v-for="(project, index) in projects" :key="project.id" ref="projectRefs"
                     class="border-t border-[#111111]/10 py-12 cursor-pointer group"
-                    @mouseenter="handleMouseEnter(project.id)" @mouseleave="handleMouseLeave">
+                    @mouseenter="hoveredProject = project.id" @mouseleave="hoveredProject = null">
                     <div class="flex justify-between items-center">
                         <!-- Left Side - Title -->
                         <div class="flex-1">
-                            <h3 ref="titleTextRefs"
-                                class="text-[#111111] group-hover:text-[#BFFF00] transition-colors duration-300" :style="{
-                                    fontSize: 'clamp(2rem, 4vw, 4rem)',
-                                    lineHeight: '1.1',
-                                    letterSpacing: '-0.02em',
-                                }">
+                            <h3 :ref="el => titleRefs[index] = el as HTMLElement"
+                                class="text-[#111111] group-hover:text-[#BFFF00] transition-colors duration-300"
+                                :style="{ fontSize: 'clamp(2rem, 4vw, 4rem)', lineHeight: '1.1', letterSpacing: '-0.02em' }">
                                 {{ project.title }}
                             </h3>
                         </div>
 
-                        <!-- Right Side - Metadata -->
-                        <div class="flex gap-16 text-[#111111]/60">
+                        <!-- Right Side - Metadata (text aligned to the right) -->
+                        <div class="flex gap-16 text-[#111111]/60 text-right">
                             <div>
-                                <div class="uppercase tracking-[0.2em] mb-2" style="font-size: 0.75rem;">
+                                <div class="uppercase tracking-[0.2em] mb-2 text-[0.75rem]">
                                     Category
                                 </div>
                                 <div>{{ project.category }}</div>
                             </div>
                             <div>
-                                <div class="uppercase tracking-[0.2em] mb-2" style="font-size: 0.75rem;">
+                                <div class="uppercase tracking-[0.2em] mb-2 text-[0.75rem]">
                                     Year
                                 </div>
                                 <div>{{ project.year }}</div>
@@ -63,34 +60,40 @@
         </div>
 
         <!-- Cursor Following Image -->
-        <transition name="fade-scale" appear>
-            <div v-if="hoveredProject !== null" class="fixed pointer-events-none z-50" :style="{
-                left: mousePosition.x + 'px',
-                top: mousePosition.y + 'px',
-            }">
-                <div class="relative overflow-hidden rounded-lg shadow-2xl" :style="{
-                    width: '400px',
-                    height: '500px',
-                    transform: 'translate(-50%, -50%)',
-                }">
-                    <ImageWithFallback :src="currentProjectImage" :alt="currentProjectTitle"
-                        class="w-full h-full object-cover" :fallback-src="optionalCustomFallbackUrl"
-                        /> <!-- Accent Border -->
-                        <div class="absolute inset-0 border-2 border-[#BFFF00] rounded-lg" />
-                </div>
+        <div v-if="hoveredProject !== null" ref="cursorImageRef" class="fixed pointer-events-none z-50" :style="{
+            left: mousePosition.x + 'px',
+            top: mousePosition.y + 'px',
+        }">
+            <div class="relative overflow-hidden rounded-lg shadow-2xl" style="
+          width: 400px;
+          height: 500px;
+          transform: translate(-50%, -50%);
+        ">
+                <img :src="hoveredProjectData?.image" :alt="hoveredProjectData?.title"
+                    class="w-full h-full object-cover" @error="handleImageError" />
+                <!-- Accent Border -->
+                <div class="absolute inset-0 border-2 border-[#BFFF00] rounded-lg" />
             </div>
-        </transition>
+        </div>
     </section>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue'
-import gsap from 'gsap'
-import { useElementVisibility } from '@vueuse/core' // Gunakan VueUse untuk visibility
-import ImageWithFallback from './figma/ImageWithFallback.vue' // Pastikan path benar
+<script setup lang="ts">
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import gsap, { clamp } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Data
-const projects = [
+gsap.registerPlugin(ScrollTrigger);
+
+interface Project {
+    id: number;
+    title: string;
+    category: string;
+    year: string;
+    image: string;
+}
+
+const projects: Project[] = [
     {
         id: 1,
         title: 'Architectural Vision',
@@ -121,110 +124,107 @@ const projects = [
     },
 ];
 
-// State
-const hoveredProject = ref(null)
-const mousePosition = ref({ x: 0, y: 0 })
-const sectionInView = ref(false)
+const sectionRef = ref<HTMLElement | null>(null);
+const titleRef = ref<HTMLElement | null>(null);
+const projectRefs = ref<HTMLElement[]>([]);
+const titleRefs = ref<HTMLElement[]>([]);
+const cursorImageRef = ref<HTMLElement | null>(null);
 
-// Refs
-const sectionRef = ref(null)
-const titleRef = ref(null)
-const projectItemRefs = ref([]) // Array untuk item proyek
-const titleTextRefs = ref([]) // Array untuk teks judul proyek
 
-// Computed untuk data gambar dan judul yang sedang di-hover
-const currentProject = computed(() => {
-    if (hoveredProject.value === null) return null
-    return projects.find(p => p.id === hoveredProject.value)
-})
+const hoveredProject = ref<number | null>(null);
+const mousePosition = ref({ x: 0, y: 0 });
 
-const currentProjectImage = computed(() => currentProject.value?.image || '')
-const currentProjectTitle = computed(() => currentProject.value?.title || '')
+const hoveredProjectData = computed(() => {
+    return projects.find(p => p.id === hoveredProject.value);
+});
 
-// Event Handlers
-const handleMouseMove = (e) => {
+const handleMouseMove = (e: MouseEvent) => {
     mousePosition.value = {
         x: e.clientX,
         y: e.clientY,
-    }
-}
+    };
+};
 
-const handleMouseEnter = (id) => {
-    hoveredProject.value = id
-}
+const handleImageError = (e: Event) => {
+    const target = e.target as HTMLImageElement;
+    target.src = 'https://via.placeholder.com/400x500?text=Image+Not+Available';
+};
 
-const handleMouseLeave = () => {
-    hoveredProject.value = null
-}
-
-// Gunakan Intersection Observer
 onMounted(() => {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                sectionInView.value = true
-                observer.disconnect() // Hanya sekali
+    // Animate title
+    if (titleRef.value) {
+        gsap.fromTo(
+            titleRef.value,
+            { opacity: 0, y: 30 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: titleRef.value,
+                    start: 'top 80%',
+                    // end: 'bottom 20%',
+                    // toggleActions: 'play none none reverse'
+                    once: true,
+                }
             }
-        })
-    }, { threshold: 0.2 })
-
-    if (sectionRef.value) {
-        observer.observe(sectionRef.value)
+        );
     }
 
-    // Animasi setelah state inView berubah
-    // Kita gunakan watch effect atau cukup kondisi if di dalam mounted
-    // Karena sectionInView reaktif, kita bisa memicu animasi berdasarkan nilainya
-    // Namun, karena animasi biasanya hanya sekali, kita simulasikan dengan setTimeout
-    setTimeout(() => {
-        if (sectionInView.value) {
-            // Animasi judul bagian
-            if (titleRef.value) {
-                gsap.fromTo(titleRef.value,
-                    { opacity: 0, y: 30 },
-                    { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" }
-                )
-            }
-
-            // Animasi item proyek
-            if (projectItemRefs.value && projectItemRefs.value.length > 0) {
-                gsap.fromTo(projectItemRefs.value,
-                    { opacity: 0, y: 50 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.8,
-                        stagger: 0.15,
-                        ease: "power4.out"
+    // Animate projects
+    projectRefs.value.forEach((el, index) => {
+        if (el) {
+            gsap.fromTo(
+                el,
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: index * 0.15,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: projectRefs.value,
+                        start: 'top 80%',
+                        // end: 'bottom 20%',
+                        // toggleActions: 'play none none reverse'
+                        once: true,
                     }
-                )
-            }
-
-            // Animasi teks judul proyek saat hover (inisialisasi efek)
-            // Efek aktual akan dipicu oleh perubahan hoveredProject
+                }
+            );
         }
-    }, 100) // Delay kecil untuk memastikan observer bekerja
+    });
+});
 
-    // Animasi teks judul saat hover (inisialisasi GSAP)
-    // Kita gunakan watch effect untuk mengikuti perubahan hoveredProject
-    // Atau cukup gunakan binding style langsung seperti di React sebelumnya
-    // Di sini, kita gunakan binding style langsung untuk efisiensi.
-})
+// Animate cursor image on hover
+watch(hoveredProject, async (newVal, oldVal) => {
+    if (newVal !== null && oldVal === null) {
+        await nextTick();
+        if (cursorImageRef.value) {
+            gsap.fromTo(
+                cursorImageRef.value,
+                { opacity: 0, scale: 0.8 },
+                { opacity: 1, scale: 1, duration: 0.3, ease: 'power3.out' }
+            );
+        }
+    }
+});
+
+// Animate title hover
+watch(hoveredProject, (newVal) => {
+    titleRefs.value.forEach((el, index) => {
+        if (el && projects[index]) {
+            if (projects[index].id === newVal) {
+                gsap.to(el, { x: 20, duration: 0.4, ease: 'power3.out' });
+            } else {
+                gsap.to(el, { x: 0, duration: 0.4, ease: 'power3.out' });
+            }
+        }
+    });
+});
 </script>
 
-<style>
-/* Definisikan transisi untuk gambar mengikuti kursor */
-.fade-scale-enter-active,
-.fade-scale-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.fade-scale-enter-from,
-.fade-scale-leave-to {
-    opacity: 0;
-    transform: translate(var(--mouse-x, 0), var(--mouse-y, 0)) scale(0.8);
-}
-
-/* Kita tidak bisa menggunakan CSS var langsung untuk posisi di sini,
-   jadi transisi scale dan opacity saja yang ditangani oleh Vue Transition */
+<style scoped>
+/* Additional styles if needed */
 </style>

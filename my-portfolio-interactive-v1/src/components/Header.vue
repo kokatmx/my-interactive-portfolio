@@ -10,83 +10,101 @@
             <!-- Navigation Links -->
             <div class="flex gap-12">
                 <div v-for="(link, index) in navLinks" :key="link" ref="navItemRefs" class="relative cursor-pointer"
-                    @mouseenter="handleMouseEnter(link)" @mouseleave="handleMouseLeave">
+                    @mouseenter="handleMouseEnter(link, index)" @mouseleave="handleMouseLeave(index)">
                     <span class="text-[#F5F5F5] hover:text-[#BFFF00] transition-colors duration-300">
                         {{ link }}
                     </span>
 
                     <!-- Animated Underline -->
-                    <div :ref="el => setUnderlineRef(el, index)"
+                    <div :ref="el => setUnderlineRef(el as HTMLElement, index)"
                         class="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#BFFF00]"
-                        :style="{ transform: `scaleX(${getUnderlineScale(link)})`, transformOrigin: 'left' }" />
+                        style="transform: scaleX(0); transform-origin: left;" />
                 </div>
             </div>
         </nav>
     </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import gsap from 'gsap'
 
-const navLinks = ['Work', 'About', 'Contact']
-const hoveredLink = ref(null)
+// Daftar link navigasi
+const navLinks = ['Work', 'About', 'Contact'] as const
+
+// Link yang sedang di-hover
+const hoveredLink = ref<string | null>(null)
 
 // Refs untuk elemen DOM
-const headerRef = ref(null)
-const logoRef = ref(null)
-const navItemRefs = ref([]) // Gunakan array untuk ref pada loop
-const underlineRefs = ref([])
+const headerRef = ref<HTMLElement | null>(null)
+const logoRef = ref<HTMLElement | null>(null)
+const navItemRefs = ref<HTMLElement[]>([]) // Array untuk menampung ref tiap item nav
+const underlineRefs = ref<(HTMLElement | null)[]>([]) // Array untuk underline
 
-// Fungsi untuk mengatur ref underline
-const setUnderlineRef = (el, index) => {
+// Fungsi untuk menyimpan ref underline berdasarkan index
+const setUnderlineRef = (el: HTMLElement | null, index: number) => {
     if (el) underlineRefs.value[index] = el
 }
 
-// Fungsi untuk menghitung skala underline
-const getUnderlineScale = (link) => {
-    return hoveredLink.value === link ? 1 : 0
-}
-
-// Fungsi event handler
-const handleMouseEnter = (link) => {
+// Event handler saat mouse masuk ke link
+const handleMouseEnter = (link: string, index: number) => {
     hoveredLink.value = link
+    
+    // Animasi underline dengan GSAP
+    const underline = underlineRefs.value[index]
+    if (underline) {
+        gsap.to(underline, {
+            scaleX: 1,
+            duration: 0.3,
+            ease: 'power2.out'
+        })
+    }
 }
 
-const handleMouseLeave = () => {
+// Event handler saat mouse keluar dari link
+const handleMouseLeave = (index: number) => {
     hoveredLink.value = null
+    
+    // Animasi underline kembali ke 0
+    const underline = underlineRefs.value[index]
+    if (underline) {
+        gsap.to(underline, {
+            scaleX: 0,
+            duration: 0.3,
+            ease: 'power2.in'
+        })
+    }
 }
 
+// Animasi saat komponen dimount
 onMounted(() => {
-    // Animasi header saat mount
-    gsap.fromTo(headerRef.value,
+    // Animasi header masuk dari atas
+    gsap.fromTo(
+        headerRef.value,
         { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "power4.out" }
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' }
     )
 
-    // Animasi logo
-    gsap.fromTo(logoRef.value,
+    // Animasi logo fade-in
+    gsap.fromTo(
+        logoRef.value,
         { opacity: 0 },
         { opacity: 1, duration: 0.6, delay: 0.2 }
     )
 
-    // Animasi item navigasi
-    if (navItemRefs.value && navItemRefs.value.length > 0) {
-        gsap.fromTo(navItemRefs.value,
+    // Animasi nav item dengan stagger (efek bertahap)
+    if (navItemRefs.value.length > 0) {
+        gsap.fromTo(
+            navItemRefs.value,
             { opacity: 0, y: -20 },
             {
                 opacity: 1,
                 y: 0,
                 duration: 0.6,
-                stagger: 0.1, // Delay bertahap antar item
-                delay: 0.3   // Delay awal sebelum animasi stagger
+                stagger: 0.1, // Delay antar item
+                delay: 0.3
             }
         )
     }
-
-    // Animasi underline saat hover state berubah
-    // Kita bisa menggunakan watch effect jika perlu animasi yang lebih kompleks
-    // Namun untuk animasi CSS sederhana seperti ini, binding style sudah cukup.
-    // Jika ingin efek GSAP, bisa tambahkan watchEffect di bawah.
 })
 </script>
