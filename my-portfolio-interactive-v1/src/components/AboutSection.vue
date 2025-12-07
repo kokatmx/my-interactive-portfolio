@@ -2,7 +2,7 @@
     <section ref="sectionRef" class="relative px-8 md:px-16 py-32 bg-[#111111]">
         <div class="max-w-[1800px] mx-auto">
             <!-- Section Title -->
-            <div ref="titleRef" class="mb-16">
+            <div ref="titleRef" class="mb-16 opacity-0 translate-y-8">
                 <span class="text-[#BFFF00] uppercase tracking-[0.3em]" style="font-size: 0.875rem">
                     About
                 </span>
@@ -11,7 +11,7 @@
             <!-- Two Column Layout -->
             <div class="grid md:grid-cols-2 gap-16 md:gap-24">
                 <!-- Left Column - Description -->
-                <div ref="leftColRef">
+                <div ref="leftColRef" class="opacity-0 translate-y-8">
                     <h2 class="text-[#F5F5F5] mb-8" :style="{
                         fontSize: 'clamp(1.75rem, 3vw, 3rem)',
                         lineHeight: '1.2',
@@ -41,7 +41,7 @@
                 </div>
 
                 <!-- Right Column - CTA -->
-                <div ref="rightColRef" class="flex flex-col justify-center items-start md:items-center">
+                <div ref="rightColRef" class="flex flex-col justify-center items-start md:items-center opacity-0 translate-x-8">
                     <div class="text-center">
                         <p class="text-[#F5F5F5]/60 mb-8" :style="{ fontSize: 'clamp(1rem, 1.2vw, 1.125rem)' }">
                             Interested in working together?
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <!-- Decorative Line -->
-            <div ref=" lineRef" class="h-[1px] bg-[#BFFF00]/20 mt-32 origin-left"
+            <div ref="lineRef" class="h-[1px] bg-[#BFFF00]/20 mt-32 origin-left"
                 :style="{ transform: `scaleX(${lineScale})`, transformOrigin: 'left' }" />
         </div>
         <!-- Animation Available For Work -->

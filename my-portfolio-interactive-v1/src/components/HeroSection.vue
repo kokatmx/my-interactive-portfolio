@@ -62,110 +62,115 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useThrottleFn } from '@vueuse/core'
 import gsap from 'gsap'
 
-// Data teks
+// Text data
 const title = 'Fullstack Developer'
 const subtitle = 'Crafting Digital Experiences'
-const titleWords = title.split(' ') // Pisahkan tiap kata
+const titleWords = title.split(' ')
 
-// State reaktif
-const mousePosition = ref({ x: 0, y: 0 }) // Untuk efek parallax mouse
-const accentLineScale = ref(0) // Skala horizontal accent line
-const decorativeElementScale = ref(0) // Skala decorative circle
-const decorativeElementRotation = ref(-180) // Rotasi awal decorative circle
+// Reactive state
+const mousePosition = ref({ x: 0, y: 0 })
+const accentLineScale = ref(0)
+const decorativeElementScale = ref(0)
+const decorativeElementRotation = ref(-180)
 
-// Refs ke elemen DOM
+// DOM refs
 const eyebrowRef = ref<HTMLElement | null>(null)
 const titleRef = ref<HTMLElement | null>(null)
-const letterRefs = ref<HTMLElement[]>([]) // Semua huruf judul
+const letterRefs = ref<HTMLElement[]>([])
 const subtitleRef = ref<HTMLElement | null>(null)
 const accentLineRef = ref<HTMLElement | null>(null)
 const scrollIndicatorRef = ref<HTMLElement | null>(null)
 const decorativeElementRef = ref<HTMLElement | null>(null)
 
-// Handler gerakan mouse untuk parallax
-const handleMouseMove = (e: MouseEvent) => {
+// GSAP context for cleanup
+let ctx: gsap.Context
+
+// Throttled mouse handler for better performance (60fps = ~16ms)
+const handleMouseMove = useThrottleFn((e: MouseEvent) => {
     mousePosition.value = {
-        x: (e.clientX / window.innerWidth - 0.5) * 20, // -10 sampai 10
-        y: (e.clientY / window.innerHeight - 0.5) * 20, // -10 sampai 10
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
     }
-}
+}, 16)
 
 onMounted(() => {
-    // Tambahkan listener mouse move
     window.addEventListener('mousemove', handleMouseMove)
 
-    // 1. Animasi eyebrow text masuk dari kiri
-    gsap.fromTo(
-        eyebrowRef.value,
-        { opacity: 0, x: -30 },
-        { opacity: 1, x: 0, duration: 1, delay: 0.2, ease: 'power4.out' }
-    )
-
-    // 2. Animasi huruf per huruf pada judul
-    if (letterRefs.value.length) {
+    ctx = gsap.context(() => {
+        // Eyebrow entrance
         gsap.fromTo(
-            letterRefs.value,
-            { opacity: 0, y: 50 },
+            eyebrowRef.value,
+            { opacity: 0, x: -30 },
+            { opacity: 1, x: 0, duration: 1, delay: 0.2, ease: 'power4.out' }
+        )
+
+        // Letter-by-letter title animation
+        if (letterRefs.value.length) {
+            gsap.fromTo(
+                letterRefs.value,
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    stagger: 0.08,
+                    delay: 0.38,
+                    ease: 'back.out(1.7)',
+                }
+            )
+        }
+
+        // Subtitle fade-in
+        gsap.fromTo(
+            subtitleRef.value,
+            { opacity: 0 },
+            { opacity: 1, duration: 1, delay: 1.2 }
+        )
+
+        // Accent line scale animation
+        gsap.to(accentLineScale, {
+            value: 1,
+            duration: 1.2,
+            delay: 0.8,
+            ease: 'power4.out',
+        })
+
+        // Scroll indicator bounce
+        gsap.fromTo(
+            scrollIndicatorRef.value,
+            { opacity: 0, y: -20 },
             {
                 opacity: 1,
                 y: 0,
-                duration: 1,
-                stagger: 0.08, // Delay antar huruf
-                delay: 0.38,
-                ease: 'back.out(1.7)', // Efek memantul
+                duration: 0.8,
+                delay: 1.5,
+                repeat: -1,
+                yoyo: true,
+                repeatDelay: 0.5,
             }
         )
-    }
 
-    // 3. Fade-in subtitle
-    gsap.fromTo(
-        subtitleRef.value,
-        { opacity: 0 },
-        { opacity: 1, duration: 1, delay: 1.2 }
-    )
-
-    // 4. Accent line masuk dari kiri (scaleX 0 ke 1)
-    gsap.to(accentLineScale, {
-        value: 1,
-        duration: 1.2,
-        delay: 0.8,
-        ease: 'power4.out',
-    })
-
-    // 5. Scroll indicator animasi naik-turun terus
-    gsap.fromTo(
-        scrollIndicatorRef.value,
-        { opacity: 0, y: -20 },
-        {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: 1.5,
-            repeat: -1,
-            yoyo: true,
-            repeatDelay: 0.5,
-        }
-    )
-
-    // 6. Decorative circle muncul dan berputar
-    gsap.to(decorativeElementScale, {
-        value: 1,
-        duration: 1.2,
-        delay: 0.5,
-        ease: 'power4.out',
-    })
-    gsap.to(decorativeElementRotation, {
-        value: 0,
-        duration: 1.2,
-        delay: 0.5,
-        ease: 'power4.out',
+        // Decorative circle scale and rotate
+        gsap.to(decorativeElementScale, {
+            value: 1,
+            duration: 1.2,
+            delay: 0.5,
+            ease: 'power4.out',
+        })
+        gsap.to(decorativeElementRotation, {
+            value: 0,
+            duration: 1.2,
+            delay: 0.5,
+            ease: 'power4.out',
+        })
     })
 })
 
-// Bersihkan event listener saat komponen di-unmount
 onUnmounted(() => {
     window.removeEventListener('mousemove', handleMouseMove)
+    ctx?.revert()
 })
 </script>

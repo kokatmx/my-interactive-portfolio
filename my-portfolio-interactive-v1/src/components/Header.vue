@@ -3,54 +3,66 @@
         :style="{ backdropFilter: 'blur(8px)', backgroundColor: 'rgba(17, 17, 17, 0.5)' }">
         <nav class="flex justify-between items-center max-w-[1800px] mx-auto">
             <!-- Logo -->
-            <div ref="logoRef" class="tracking-tight text-[#F5F5F5]">
+            <router-link to="/" ref="logoRef" class="tracking-tight text-[#F5F5F5] hover:text-[#BFFF00] transition-colors duration-300">
                 <span class="uppercase">Suko Dwi Atmodjo</span>
-            </div>
+            </router-link>
 
             <!-- Navigation Links -->
             <div class="flex gap-12">
-                <div v-for="(link, index) in navLinks" :key="link" ref="navItemRefs" class="relative cursor-pointer"
-                    @mouseenter="handleMouseEnter(link, index)" @mouseleave="handleMouseLeave(index)">
-                    <span class="text-[#F5F5F5] hover:text-[#BFFF00] transition-colors duration-300">
-                        {{ link }}
+                <router-link 
+                    v-for="(link, index) in navLinks" 
+                    :key="link.name"
+                    :to="link.path"
+                    ref="navItemRefs"
+                    class="relative cursor-pointer group"
+                    @mouseenter="handleMouseEnter(index)"
+                    @mouseleave="handleMouseLeave(index)"
+                >
+                    <span class="text-[#F5F5F5] group-hover:text-[#BFFF00] transition-colors duration-300">
+                        {{ link.name }}
                     </span>
 
                     <!-- Animated Underline -->
-                    <div :ref="el => setUnderlineRef(el as HTMLElement, index)"
+                    <div 
+                        :ref="el => setUnderlineRef(el as HTMLElement, index)"
                         class="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#BFFF00]"
-                        style="transform: scaleX(0); transform-origin: left;" />
-                </div>
+                        style="transform: scaleX(0); transform-origin: left;" 
+                    />
+                </router-link>
             </div>
         </nav>
     </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 
-// Daftar link navigasi
-const navLinks = ['Work', 'About', 'Contact'] as const
+interface NavLink {
+    name: string
+    path: string
+}
 
-// Link yang sedang di-hover
-const hoveredLink = ref<string | null>(null)
+const navLinks: NavLink[] = [
+    { name: 'Work', path: '/work' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+]
 
-// Refs untuk elemen DOM
+// Refs
 const headerRef = ref<HTMLElement | null>(null)
 const logoRef = ref<HTMLElement | null>(null)
-const navItemRefs = ref<HTMLElement[]>([]) // Array untuk menampung ref tiap item nav
-const underlineRefs = ref<(HTMLElement | null)[]>([]) // Array untuk underline
+const navItemRefs = ref<HTMLElement[]>([])
+const underlineRefs = ref<(HTMLElement | null)[]>([])
 
-// Fungsi untuk menyimpan ref underline berdasarkan index
+// GSAP context for cleanup
+let ctx: gsap.Context
+
 const setUnderlineRef = (el: HTMLElement | null, index: number) => {
     if (el) underlineRefs.value[index] = el
 }
 
-// Event handler saat mouse masuk ke link
-const handleMouseEnter = (link: string, index: number) => {
-    hoveredLink.value = link
-    
-    // Animasi underline dengan GSAP
+const handleMouseEnter = (index: number) => {
     const underline = underlineRefs.value[index]
     if (underline) {
         gsap.to(underline, {
@@ -61,11 +73,7 @@ const handleMouseEnter = (link: string, index: number) => {
     }
 }
 
-// Event handler saat mouse keluar dari link
 const handleMouseLeave = (index: number) => {
-    hoveredLink.value = null
-    
-    // Animasi underline kembali ke 0
     const underline = underlineRefs.value[index]
     if (underline) {
         gsap.to(underline, {
@@ -76,35 +84,40 @@ const handleMouseLeave = (index: number) => {
     }
 }
 
-// Animasi saat komponen dimount
 onMounted(() => {
-    // Animasi header masuk dari atas
-    gsap.fromTo(
-        headerRef.value,
-        { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' }
-    )
-
-    // Animasi logo fade-in
-    gsap.fromTo(
-        logoRef.value,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.6, delay: 0.2 }
-    )
-
-    // Animasi nav item dengan stagger (efek bertahap)
-    if (navItemRefs.value.length > 0) {
+    ctx = gsap.context(() => {
+        // Header entrance animation
         gsap.fromTo(
-            navItemRefs.value,
-            { opacity: 0, y: -20 },
-            {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                stagger: 0.1, // Delay antar item
-                delay: 0.3
-            }
+            headerRef.value,
+            { y: -100, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8, ease: 'power4.out' }
         )
-    }
+
+        // Logo fade-in
+        gsap.fromTo(
+            logoRef.value,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.6, delay: 0.2 }
+        )
+
+        // Nav items stagger
+        if (navItemRefs.value.length > 0) {
+            gsap.fromTo(
+                navItemRefs.value,
+                { opacity: 0, y: -20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    delay: 0.3
+                }
+            )
+        }
+    })
+})
+
+onUnmounted(() => {
+    ctx?.revert()
 })
 </script>

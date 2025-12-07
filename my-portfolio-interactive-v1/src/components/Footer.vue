@@ -4,7 +4,7 @@
             <!-- Main Footer Content -->
             <div class="grid md:grid-cols-3 gap-12 mb-16">
                 <!-- Left - Brand -->
-                <div ref="brandRef">
+                <div ref="brandRef" class="opacity-0 translate-y-8">
                     <h3 class="text-[#F5F5F5] mb-4 uppercase tracking-tight">Suko Dwi Atmodjo</h3>
                     <p class="text-[#F5F5F5]/60" style="font-size: 0.875rem">
                         Fullstack Developer
@@ -14,7 +14,7 @@
                 </div>
 
                 <!-- Middle - Email -->
-                <div ref="emailRef" class="flex flex-col justify-center">
+                <div ref="emailRef" class="flex flex-col justify-center opacity-0 translate-y-8">
                     <span class="text-[#F5F5F5]/40 uppercase tracking-[0.2em] mb-3" style="font-size: 0.75rem">
                         Get In Touch
                     </span>
@@ -26,12 +26,12 @@
                 </div>
 
                 <!-- Right - Social Links -->
-                <div ref="socialRef" class="flex flex-col justify-center items-start md:items-end">
+                <div ref="socialRef" class="flex flex-col justify-center items-start md:items-end opacity-0 translate-y-8">
                     <span class="text-[#F5F5F5]/40 uppercase tracking-[0.2em] mb-4" style="font-size: 0.75rem">
                         Follow
                     </span>
                     <div class="flex gap-6">
-                        <component :is="social.component" v-for="(social, index) in socialLinks" :key="social.name"
+                        <component :is="social.component" v-for="social in socialLinks" :key="social.name"
                             ref="socialIconRefs" :href="social.url"
                             class="text-[#F5F5F5]/60 hover:text-[#BFFF00] transition-colors duration-300"
                             :aria-label="social.name" :style="{ width: '24px', height: '24px' }" />
@@ -41,7 +41,7 @@
 
             <!-- Bottom - Copyright & Year -->
             <div ref="copyrightRef"
-                class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-[#F5F5F5]/10">
+                class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-[#F5F5F5]/10 opacity-0">
                 <p class="text-[#F5F5F5]/40" style="font-size: 0.875rem">
                     © 2025 Suko Dwi A. All rights reserved.
                 </p>
@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
-import { Linkedin, Github, Dribbble } from 'lucide-vue-next' // Ikon Vue 3 dari lucide
+import { Linkedin, Github } from 'lucide-vue-next'
 
 // Tipe data untuk link sosial
 type SocialLink = {

@@ -1,47 +1,47 @@
 <template>
-  <!-- Loading Screen - Shown during initial load -->
+  <!-- Global Intro Loader (First Load Only) -->
   <LoadingScreen v-if="showLoader" @done="handleLoaded" />
 
-  <!-- Main Content -->
-  <transition v-else name="fade">
+  <!-- Main App Content (after intro finishes) -->
+  <transition v-else name="fade" mode="out-in">
     <div>
       <ScrollProgress />
       <CustomCursor v-if="isDesktop" />
-      <Home />
+      <router-view v-slot="{ Component }">
+        <component :is="Component" />
+      </router-view>
     </div>
   </transition>
+
+  <!-- Global Page Transition Overlay -->
+  <PageTransition ref="pageTransition" />
 </template>
 
-
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useMediaQuery } from '@vueuse/core'
 import LoadingScreen from './components/LoadingScreen.vue'
 import ScrollProgress from './components/ScrollProgress.vue'
 import CustomCursor from './components/CustomCursor1.vue'
-import Home from './views/HomePage.vue'
+import PageTransition from './components/PageTransition.vue'
+import { registerPageTransition } from './router/index'
 
 const showLoader = ref(true)
-const isDesktop = ref(window.innerWidth >= 768)
+const pageTransition = ref()
 
+// Use VueUse for reactive media query - auto-updates on resize
+const isDesktop = useMediaQuery('(min-width: 768px)')
+
+// Register page transition instance with router
+onMounted(() => {
+  registerPageTransition(pageTransition.value)
+})
+
+// Loader finished (after GSAP animation from LoadingScreen)
 const handleLoaded = () => {
   setTimeout(() => (showLoader.value = false), 200)
 }
-
-const handleResize = () => {
-  isDesktop.value = window.innerWidth >= 768
-}
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
-})
 </script>
-
-
-<!-- Styles that hide the default cursor on desktop devices -->
 
 <style scoped>
 @media (min-width: 768px) {
@@ -64,3 +64,4 @@ onUnmounted(() => {
   transform: scale(1);
 }
 </style>
+
