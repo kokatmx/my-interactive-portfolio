@@ -62,14 +62,14 @@ onMounted(() => {
                     <a class="cta-button group flex h-24 w-24 items-center justify-center rounded-full bg-primary transition-transform hover:scale-110"
                         :href="`mailto:${email}`">
                         <span
-                            class="material-symbols-outlined text-4xl text-ink transition-transform group-hover:-rotate-45">arrow_forward</span>
+                            class="material-symbols-outlined text-4xl text-ink transition-transform group-hover:-rotate-45">arrow_outward</span>
                     </a>
                 </div>
             </div>
             <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4 border-t border-white/10 pt-10">
                 <div class="flex flex-col gap-4">
                     <h4 class="text-sm font-bold uppercase text-white/40">Contact</h4>
-                    <a class="text-lg hover:text-primary transition-colors" href="mailto:hello@kodev.ai">{{ email }}</a>
+                    <a class="text-lg hover:text-primary transition-colors" :href="`mailto:${email}`">{{ email }}</a>
                     <p class="text-lg text-white/60">Based in Indonesia</p>
                 </div>
                 <div class="flex flex-col gap-4">
