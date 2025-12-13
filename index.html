@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Chen | Intelligent Web Systems</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="nav-header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-full">ALEX C.</span>
+                <span class="logo-short">A.C.</span>
+            </a>
+
+            <div class="separator"></div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#work" class="nav-link">Work</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                </ul>
+            </nav>
+            <a href="#contact" class="btn-contact">Let's Talk ↗</a>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu">
+        <ul>
+            <li><a href="#work" class="mobile-nav-link">Work</a></li>
+            <li><a href="#about" class="mobile-nav-link">About</a></li>
+            <li><a href="#contact" class="mobile-nav-link btn-mobile-contact">Let's Talk ↗</a></li>
+        </ul>
+    </div>
+
+    <main class="main-content">
+
+        <section class="hero-section">
+            <div class="organic-pattern"></div>
+            <div class="container hero-content">
+                <h1 class="hero-title margin-bottom-medium">
+                    <div class="text-reveal-wrapper"><span class="text-reveal">Creating</span></div>
+                    <div class="text-reveal-wrapper"><span class="text-reveal text-accent">Intelligent</span></div>
+                    <div class="text-reveal-wrapper"><span class="text-reveal">Web Systems.</span></div>
+                </h1>
+                <div class="hero-subtext fade-in-up">
+                    <p>Fresh Graduate. Full-Stack Developer. AI Enthusiast.</p>
+                </div>
+                <div class="hero-cta fade-in-up delay-1">
+                    <a href="#work" class="btn-primary">View Portfolio ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding" id="work">
+            <div class="container">
+                <h2 class="section-title scroll-reveal">Selected Works <span class="accent-dot">.</span></h2>
+
+                <div class="project-grid">
+                    <a href="#" class="project-card scroll-reveal">
+                        <div class="card-image">
+                            <img src="https://picsum.photos/seed/ai1/800/600" alt="Project Thumbnail">
+                            <div class="card-overlay"></div>
+                        </div>
+                        <div class="card-info">
+                            <div class="card-tags">
+                                <span>React</span><span>OpenAI API</span>
+                            </div>
+                            <h3 class="card-title">Neural Scribe Platform</h3>
+                        </div>
+                    </a>
+
+                    <a href="#" class="project-card scroll-reveal" data-delay="0.2">
+                        <div class="card-image">
+                            <img src="https://picsum.photos/seed/web2/800/600" alt="Project Thumbnail">
+                            <div class="card-overlay"></div>
+                        </div>
+                        <div class="card-info">
+                            <div class="card-tags">
+                                <span>Python</span><span>TensorFlow Lite</span>
+                            </div>
+                            <h3 class="card-title">Aura Recommendation Engine</h3>
+                        </div>
+                    </a>
+
+                    <a href="#" class="project-card scroll-reveal" data-delay="0.4">
+                        <div class="card-image">
+                            <img src="https://picsum.photos/seed/data3/800/600" alt="Project Thumbnail">
+                            <div class="card-overlay"></div>
+                        </div>
+                        <div class="card-info">
+                            <div class="card-tags">
+                                <span>D3.js</span><span>Vue.js</span>
+                            </div>
+                            <h3 class="card-title">Synapse Data Visualizer</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-padding bg-muted" id="about">
+            <div class="container">
+                <h2 class="section-title scroll-reveal">The Toolkit <span class="accent-dot">.</span></h2>
+
+                <div class="skills-grid">
+                    <div class="skill-column scroll-reveal">
+                        <h3>Core Web & Front-End</h3>
+                        <ul class="skill-list">
+                            <li>JavaScript (ES6+) & TypeScript</li>
+                            <li>React ecosystem (Next.js)</li>
+                            <li>Modern CSS (Tailwind/SCSS)</li>
+                            <li>Creative Coding (GSAP, Three.js basics)</li>
+                        </ul>
+                    </div>
+                    <div class="skill-column scroll-reveal" data-delay="0.2">
+                        <h3>AI Integration & Back-End</h3>
+                        <ul class="skill-list">
+                            <li>Python (FastAPI, Flask)</li>
+                            <li>LLM Integration (LangChain, OpenAI)</li>
+                            <li>Vector Databases (Pinecone)</li>
+                            <li>Node.js Runtimes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div style="height: 10vh; background-color: var(--color-bg-main);"></div>
+
+    </main>
+
+    <footer class="parallax-footer" id="contact">
+        <div class="container footer-content-wrapper">
+            <div class="footer-cta">
+                <h2 class="big-statement">Let's <span class="text-accent-lime">collaborate</span> on the future.</h2>
+                <p class="footer-sub">Available for freelance or full-time roles starting 2025.</p>
+                <a href="mailto:hello@alex.dev" class="footer-email">hello@alex.dev</a>
+            </div>
+            <div class="footer-bottom">
+                <div class="social-links">
+                    <a href="#">GitHub ↗</a>
+                    <a href="#">LinkedIn ↗</a>
+                    <a href="#">X / Twitter ↗</a>
+                </div>
+                <p class="copyright">© 2025 Alex Chen. Organic Intelligence.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // ================= NAVIGATION ANIMATION =================
+        // Menganimasikan header menjadi kapsul mengambang saat di-scroll
+        // gsap.to(".nav-header", {
+        //     scrollTrigger: {
+        //         trigger: "body",
+        //         start: "top top", // Mulai saat bagian atas body menyentuh bagian atas viewport
+        //         end: "+=100", // Selesai setelah scroll 100px
+        //         scrub: true, // Animasi terikat dengan scroll
+        //         toggleClass: { targets: ".nav-header", className: "scrolled" } // Tambahkan class 'scrolled'
+        //     }
+        // });
+
+        // Kita ganti GSAP scrub dengan event listener scroll native yang lebih sederhana dan akurat untuk kasus ini.
+        const navHeader = document.querySelector('.nav-header');
+        const scrollThreshold = 50; // Munculkan efek setelah scroll 50px
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > scrollThreshold) {
+                navHeader.classList.add('scrolled');
+            } else {
+                navHeader.classList.remove('scrolled');
+            }
+        });
+
+        // ================= MOBILE MENU TOGGLE =================
+        const hamburger = document.querySelector(".hamburger");
+        const mobileMenu = document.querySelector(".mobile-menu");
+        const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            mobileMenu.classList.toggle("active");
+            document.body.classList.toggle("no-scroll");
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                hamburger.classList.remove("active");
+                mobileMenu.classList.remove("active");
+                document.body.classList.remove("no-scroll");
+            });
+        });
+
+        // ================= (UNCHANGED) CONTENT ANIMATIONS =================
+        gsap.from(".text-reveal", {
+            y: "100%", opacity: 0, duration: 1.2, ease: "power4.out", stagger: 0.15, delay: 0.2
+        });
+        gsap.from(".fade-in-up", {
+            y: 30, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.2, delay: 1
+        });
+        gsap.utils.toArray(".scroll-reveal").forEach(elem => {
+            let delayValue = elem.getAttribute("data-delay") || 0;
+            gsap.from(elem, {
+                y: 50, opacity: 0, duration: 1, delay: delayValue, ease: "power3.out",
+                scrollTrigger: { trigger: elem, start: "top 85%", toggleActions: "play none none reverse" }
+            });
+        });
+        gsap.from(".footer-content-wrapper", {
+            yPercent: -30, ease: "none",
+            scrollTrigger: { trigger: ".parallax-footer", start: "top bottom", end: "bottom bottom", scrub: 1 }
+        });
+        gsap.to(".organic-pattern", {
+            yPercent: 20, ease: "none",
+            scrollTrigger: { trigger: ".hero-section", start: "top top", end: "bottom top", scrub: true }
+        });
+    </script>
+</body>
+
+</html>
