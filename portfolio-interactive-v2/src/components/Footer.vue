@@ -62,7 +62,7 @@ onMounted(() => {
                     <a class="cta-button group flex h-24 w-24 items-center justify-center rounded-full bg-primary transition-transform hover:scale-110"
                         :href="`mailto:${email}`">
                         <span
-                            class="material-symbols-outlined text-4xl text-ink transition-transform group-hover:-rotate-45">arrow_outward</span>
+                            class="material-symbols-outlined text-4xl text-ink transition-transform group-hover:-rotate-45">arrow_forward</span>
                     </a>
                 </div>
             </div>
