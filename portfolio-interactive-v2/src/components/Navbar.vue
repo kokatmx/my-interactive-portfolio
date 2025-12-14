@@ -41,25 +41,27 @@ onMounted(() => {
     <nav ref="navbar"
         class="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 transition-transform duration-300">
         <!-- Mobile Navigation Overlay -->
-        <div class="fixed inset-0 z-40 flex flex-col items-center justify-start pt-28 bg-cream transition-transform duration-300 md:hidden"
-            :class="isMenuOpen ? 'translate-x-0' : 'translate-x-full'">
-            <div class="flex flex-col items-center gap-8 text-2xl font-bold text-ink">
-                <router-link :to="{ name: 'Home' }" @click="toggleMenu"
-                    class="font-primary hover:text-matcha-dark transition-colors">Home</router-link>
-                <router-link :to="{ name: 'About' }" @click="toggleMenu"
-                    class="font-primary hover:text-matcha-dark transition-colors">About</router-link>
-                <router-link :to="{ name: 'Work' }" @click="toggleMenu"
-                    class="font-primary hover:text-matcha-dark transition-colors">Work</router-link>
-                <router-link :to="{ name: 'Contact' }" @click="toggleMenu"
-                    class="font-primary hover:text-matcha-dark transition-colors">Contact</router-link>
+        <Teleport to="body">
+            <div class="fixed inset-0 z-40 flex flex-col items-center justify-start pt-28 bg-cream transition-transform duration-300 md:hidden"
+                :class="isMenuOpen ? 'translate-x-0' : 'translate-x-full'">
+                <div class="flex flex-col items-center gap-8 text-2xl font-bold text-ink">
+                    <router-link :to="{ name: 'Home' }" @click="toggleMenu"
+                        class="font-primary hover:text-matcha-dark transition-colors">Home</router-link>
+                    <router-link :to="{ name: 'About' }" @click="toggleMenu"
+                        class="font-primary hover:text-matcha-dark transition-colors">About</router-link>
+                    <router-link :to="{ name: 'Work' }" @click="toggleMenu"
+                        class="font-primary hover:text-matcha-dark transition-colors">Work</router-link>
+                    <router-link :to="{ name: 'Contact' }" @click="toggleMenu"
+                        class="font-primary hover:text-matcha-dark transition-colors">Contact</router-link>
 
-                <a :href="`mailto:${email}`"
-                    class="font-primary mt-4 flex items-center gap-2 rounded-full bg-background-dark px-6 py-3 text-base text-white transition-all hover:bg-primary hover:text-ink">
-                    <span>Let's Talk</span>
-                    <span class="material-symbols-outlined">arrow_forward</span>
-                </a>
+                    <a :href="`mailto:${email}`"
+                        class="font-primary mt-4 flex items-center gap-2 rounded-full bg-background-dark px-6 py-3 text-base text-white transition-all hover:bg-primary hover:text-ink">
+                        <span>Let's Talk</span>
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                </div>
             </div>
-        </div>
+        </Teleport>
 
         <div
             class="glass-panel relative z-50 flex items-center justify-between gap-8 rounded-full border border-white/40 bg-white/60 px-6 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.04)] backdrop-blur-md transition-all hover:bg-white/80 hover:shadow-[0_8px_32px_rgba(117,236,19,0.15)] max-w-2xl w-full">
