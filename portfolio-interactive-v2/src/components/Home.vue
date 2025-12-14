@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { projects } from '../data/projects';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,8 +86,7 @@ onMounted(() => {
 
     // --- Selected Works Section ---
     if (workSection.value) {
-        const projects = workSection.value.querySelectorAll('.group');
-        gsap.fromTo(projects,
+        gsap.fromTo(workSection.value.children,
             { y: 50, opacity: 0, scale: 0.95 },
             {
                 y: 0,
@@ -304,76 +304,49 @@ onMounted(() => {
                         class="material-symbols-outlined group-hover:-translate-y-1 transition-transform">arrow_outward</span>
                 </router-link>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[minmax(300px,auto)]">
-                <!-- Project 1: Large Span -->
-                <div
-                    class="group md:col-span-2 relative overflow-hidden rounded-3xl bg-cream aspect-16/10 md:aspect-auto">
-                    <img class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        data-alt="Abstract vibrant gradient mesh representing AI image generation"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY-pyxv8PMm5V8vFpvu6hKw5PIHW2cQmrszQ9qON-pIJnhqWhj7riHGBVXRO9laVutuB6wUtIFIYvtZkhmAroI0onEO5tbfXFgqdVpHmq1FA47RKJfNlKuK6XQaw99fZY0JforzoTdIgCYGxIgKPTvsmzqxq4Oi3G2z14Vb2Xf__-9k0XO4X8Myel1RGg2uNBa1cIwshKNzYomZgiJCNOKUIHWqKZt5c0XlJ4H9m34WdgNuC_GzGzF4qxHwsMrBseKdFkgNkZ6bg" />
+            <div ref="workSection"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[minmax(300px,auto)]">
+                <router-link v-for="project in projects" :key="project.id"
+                    :to="{ name: 'ProjectDetail', params: { id: project.id } }"
+                    class="group relative overflow-hidden rounded-[2.5rem] bg-cream cursor-pointer block" :class="{
+                        'md:col-span-2 aspect-16/10 md:aspect-auto': project.size === 'large',
+                        'md:row-span-2 min-h-[500px]': project.size === 'tall',
+                        'min-h-[350px]': project.size === 'normal'
+                    }">
+
+                    <!-- Image -->
+                    <img :src="project.image" :alt="project.title"
+                        class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+
+                    <!-- Overlay -->
                     <div
-                        class="absolute inset-0 bg-linear-to-t from-background-dark/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-80">
+                        class="absolute inset-0 bg-linear-to-t from-background-dark/90 via-background-dark/20 to-transparent opacity-80 transition-opacity duration-300">
                     </div>
-                    <div class="absolute bottom-0 left-0 p-8 md:p-12 w-full">
+
+                    <!-- Content -->
+                    <div
+                        class="absolute bottom-0 left-0 p-8 w-full transform transition-transform duration-500 group-hover:translate-y-0 translate-y-2">
                         <div class="flex items-end justify-between">
                             <div>
-                                <h3 class="text-3xl font-bold text-white mb-2 md:text-4xl">Synapse AI</h3>
-                                <p class="text-white/80 font-medium">React • Stable Diffusion • Node.js</p>
+                                <p class="text-primary font-bold text-sm uppercase tracking-wider mb-2">{{
+                                    project.category }}</p>
+                                <h3 class="text-3xl font-bold text-white mb-3 md:text-4xl">{{ project.title }}</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    <span v-for="t in project.tech" :key="t"
+                                        class="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-md">
+                                        {{ t }}
+                                    </span>
+                                </div>
                             </div>
-                            <button
-                                class="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-ink opacity-0 translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+
+                            <!-- Arrow Button -->
+                            <div
+                                class="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-ink opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100">
                                 <span class="material-symbols-outlined">arrow_outward</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Project 2: Tall Vertical -->
-                <div class="group md:row-span-2 relative overflow-hidden rounded-3xl bg-cream min-h-[400px]">
-                    <img class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        data-alt="Clean minimal dashboard UI showing data analytics graphs"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1xhvEnd7AudSAF-ZEzerdYAW0f6AQkhy96MS_yx_TAJVgQqz-o7Ni_ZBoiaKxx4Jj6_8yitPGGWX5H8r7fb21F-PdMeqIXNrEjla4URrJjVMre3GXiGwfA7vpbVCK3VM5RzOtaQbBgyP9hGQPkxhT5YA_q0PgLr96naIh_WiBqUSituGCpCWgkWl-X9hyd30VeGD8wxMFE51u35-4EeJ6Ha3KTaeZsvoxlSkbUWl3tzTIU-VjDw8Qc37W0yu-E10G-kCnqmFN2A" />
-                    <div
-                        class="absolute inset-0 bg-linear-to-t from-background-dark/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-80">
-                    </div>
-                    <div class="absolute bottom-0 left-0 p-8 w-full">
-                        <h3 class="text-2xl font-bold text-white mb-2">DataViz Pro</h3>
-                        <p class="text-white/80 font-medium">D3.js • Vue • Firebase</p>
-                    </div>
-                </div>
-                <!-- Project 3 -->
-                <div class="group relative overflow-hidden rounded-3xl bg-cream min-h-[300px]">
-                    <img class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        data-alt="E-commerce mobile app interface mockup on a table"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd9twZg62mr6IWbwJq4H9t6Mx7uldtrdFk2GcglY5IB2PfybZo32asVaz_T65N3uCmJDiMtqtDZdww1T_Zghdon4OkwsHxp7146ibDcb3Aju3aP4XmsQNhBDBt_t7xA7uFgwfu2SRmskndWKeyXFEEiVelGVm9BMgRbqJR8n3uwNaaljcOpGi5vM3C2XZNCnXgcJo7uWa-c3daI-KZS6aeeM1jVtKpcAkQcVWrLg86l4j8VjPVFJhSKv85M2NqISemqf-P1dEYzg" />
-                    <div
-                        class="absolute inset-0 bg-linear-to-t from-background-dark/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-80">
-                    </div>
-                    <div class="absolute bottom-0 left-0 p-8 w-full">
-                        <div class="flex items-end justify-between">
-                            <div>
-                                <h3 class="text-2xl font-bold text-white mb-2">EcoMarket</h3>
-                                <p class="text-white/80 font-medium">Shopify Headless • Next.js</p>
                             </div>
-                            <button
-                                class="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-ink opacity-0 translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                                <span class="material-symbols-outlined text-sm">arrow_outward</span>
-                            </button>
                         </div>
                     </div>
-                </div>
-                <!-- Project 4 -->
-                <div class="group relative overflow-hidden rounded-3xl bg-cream min-h-[300px]">
-                    <img class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        data-alt="Retro computer monitor displaying code, creative portfolio vibe"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDfACwubrucnWSBTNHMGFstlYcw3MKTQ0HelfH6-m3WET-mN0FumQOs5GAVhDwcmUctUPsiuiFuNl6eVI5UpkpXtDDcqcMzIwaBrHcmu-cqwNhAU9VFm5gAvc6YC4ljOBB1A-T0j0h0nXZvsDHkREucGqDxB11Hedi8DlHZS8NU6rzxgWlbAUFR-Dfh3XS1igm5T7XUe2IcTpaVTva-qB4_gf4wF9kRzES1_YBYKQ4Kcq5DyuWMBDqBPfARun0PRJeOPhfEUpQxA" />
-                    <div
-                        class="absolute inset-0 bg-linear-to-t from-background-dark/80 via-transparent to-transparent opacity-60 transition-opacity group-hover:opacity-80">
-                    </div>
-                    <div class="absolute bottom-0 left-0 p-8 w-full">
-                        <h3 class="text-2xl font-bold text-white mb-2">Portfolio V1</h3>
-                        <p class="text-white/80 font-medium">HTML5 • SCSS • Vanilla JS</p>
-                    </div>
-                </div>
+                </router-link>
             </div>
         </div>
     </section>
