@@ -6,6 +6,7 @@ import { onMounted, onUnmounted, watch, nextTick } from 'vue';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { SpeedInsights } from '@vercel/speed-insights/vue';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,6 +64,7 @@ onMounted(() => {
     <RouterView />
     <Footer />
   </div>
+  <SpeedInsights />
 </template>
 
 <style scoped></style>
