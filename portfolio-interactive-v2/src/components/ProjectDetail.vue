@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const route = useRoute();
 const router = useRouter();
-const project = computed(() => projects.find(p => p.id === Number(route.params.id)));
+const project = computed(() => projects.find(p => p.slug === route.params.slug));
 
 const containerRef = ref<HTMLElement | null>(null);
 const heroImageRef = ref<HTMLElement | null>(null);
@@ -20,14 +20,14 @@ let ctx: gsap.Context;
 // Find next project for the "Next Project" functionality
 const nextProject = computed(() => {
     if (!project.value) return null;
-    const currentIndex = projects.findIndex(p => p.id === project.value!.id);
+    const currentIndex = projects.findIndex(p => p.slug === project.value!.slug);
     const nextIndex = (currentIndex + 1) % projects.length; // Loop back to start
     return projects[nextIndex];
 });
 
 const navigateToNext = () => {
     if (nextProject.value) {
-        router.push({ name: 'ProjectDetail', params: { id: nextProject.value.id } });
+        router.push({ name: 'ProjectDetail', params: { slug: nextProject.value.slug } });
     }
 };
 

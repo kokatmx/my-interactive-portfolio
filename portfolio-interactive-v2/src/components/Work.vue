@@ -62,7 +62,7 @@ onMounted(() => {
                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[minmax(300px,auto)]">
 
                 <router-link v-for="project in projects" :key="project.id"
-                    :to="{ name: 'ProjectDetail', params: { id: project.id } }"
+                    :to="{ name: 'ProjectDetail', params: { slug: project.slug } }"
                     class="group relative overflow-hidden rounded-[2.5rem] bg-cream cursor-pointer block" :class="{
                         'md:col-span-2 aspect-16/10 md:aspect-auto': project.size === 'large',
                         'md:row-span-2 min-h-[500px]': project.size === 'tall',

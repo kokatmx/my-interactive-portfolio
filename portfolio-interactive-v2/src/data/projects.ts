@@ -1,6 +1,7 @@
 export interface Project {
     id: number;
     title: string;
+    slug: string;
     category: string;
     tech: string[];
     image: string;
@@ -19,6 +20,7 @@ export const projects: Project[] = [
     {
         id: 1,
         title: "Synapse AI",
+        slug: "synapse-ai",
         category: "Web Application",
         tech: ["React", "Stable Diffusion", "Node.js"],
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDY-pyxv8PMm5V8vFpvu6hKw5PIHW2cQmrszQ9qON-pIJnhqWhj7riHGBVXRO9laVutuB6wUtIFIYvtZkhmAroI0onEO5tbfXFgqdVpHmq1FA47RKJfNlKuK6XQaw99fZY0JforzoTdIgCYGxIgKPTvsmzqxq4Oi3G2z14Vb2Xf__-9k0XO4X8Myel1RGg2uNBa1cIwshKNzYomZgiJCNOKUIHWqKZt5c0XlJ4H9m34WdgNuC_GzGzF4qxHwsMrBseKdFkgNkZ6bg",
@@ -33,6 +35,7 @@ export const projects: Project[] = [
     {
         id: 2,
         title: "EcoMarket",
+        slug: "eco-market",
         category: "E-Commerce Platform",
         tech: ["Shopify Headless", "Next.js", "Tailwind"],
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAd9twZg62mr6IWbwJq4H9t6Mx7uldtrdFk2GcglY5IB2PfybZo32asVaz_T65N3uCmJDiMtqtDZdww1T_Zghdon4OkwsHxp7146ibDcb3Aju3aP4XmsQNhBDBt_t7xA7uFgwfu2SRmskndWKeyXFEEiVelGVm9BMgRbqJR8n3uwNaaljcOpGi5vM3C2XZNCnXgcJo7uWa-c3daI-KZS6aeeM1jVtKpcAkQcVWrLg86l4j8VjPVFJhSKv85M2NqISemqf-P1dEYzg",
@@ -47,6 +50,7 @@ export const projects: Project[] = [
     {
         id: 3,
         title: "DataViz Pro",
+        slug: "datavix-pro",
         category: "Analytics Dashboard",
         tech: ["D3.js", "Vue 3", "Firebase"],
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD1xhvEnd7AudSAF-ZEzerdYAW0f6AQkhy96MS_yx_TAJVgQqz-o7Ni_ZBoiaKxx4Jj6_8yitPGGWX5H8r7fb21F-PdMeqIXNrEjla4URrJjVMre3GXiGwfA7vpbVCK3VM5RzOtaQbBgyP9hGQPkxhT5YA_q0PgLr96naIh_WiBqUSituGCpCWgkWl-X9hyd30VeGD8wxMFE51u35-4EeJ6Ha3KTaeZsvoxlSkbUWl3tzTIU-VjDw8Qc37W0yu-E10G-kCnqmFN2A",
@@ -61,6 +65,7 @@ export const projects: Project[] = [
     {
         id: 4,
         title: "Portfolio V1",
+        slug: "portfolio-v1",
         category: "Personal Website",
         tech: ["HTML5", "SCSS", "Vanilla JS"],
         image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBDfACwubrucnWSBTNHMGFstlYcw3MKTQ0HelfH6-m3WET-mN0FumQOs5GAVhDwcmUctUPsiuiFuNl6eVI5UpkpXtDDcqcMzIwaBrHcmu-cqwNhAU9VFm5gAvc6YC4ljOBB1A-T0j0h0nXZvsDHkREucGqDxB11Hedi8DlHZS8NU6rzxgWlbAUFR-Dfh3XS1igm5T7XUe2IcTpaVTva-qB4_gf4wF9kRzES1_YBYKQ4Kcq5DyuWMBDqBPfARun0PRJeOPhfEUpQxA",
@@ -75,6 +80,7 @@ export const projects: Project[] = [
     {
         id: 5,
         title: "Lumina UI",
+        slug: "lumina-ui",
         category: "Design System",
         tech: ["Figma", "React", "Storybook"],
         image: "https://plus.unsplash.com/premium_photo-1681487814165-018814e29155?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
