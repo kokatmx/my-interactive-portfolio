@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 
@@ -22,45 +22,52 @@ const copyEmail = () => {
 
 const socials = [
     { name: 'LinkedIn', icon: 'business_center', url: '#', color: 'bg-[#0077b5]' },
-    { name: 'GitHub', icon: 'code', url: '#', color: 'bg-[#333]' },
-    // { name: 'Twitter / X', icon: 'chat', url: '#', color: 'bg-[#000]' },
-    // { name: 'Instagram', icon: 'photo_camera', url: '#', color: 'bg-[#E1306C]' }
+    { name: 'GitHub', icon: 'code_blocks', url: '#', color: 'bg-[#333]' }
 ];
 
+let ctx: gsap.Context;
+
 onMounted(() => {
-    const tl = gsap.timeline();
+    ctx = gsap.context(() => {
+        const tl = gsap.timeline();
 
-    // Header Reveal
-    if (headerRef.value) {
-        tl.from(headerRef.value.querySelectorAll('h1, p'), {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out"
-        });
-    }
+        // Header Reveal
+        if (headerRef.value) {
+            tl.from(headerRef.value.querySelectorAll('h1, p'), {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+        }
 
-    // Panels Reveal
-    if (leftPanel.value && rightPanel.value) {
-        tl.from([leftPanel.value, rightPanel.value], {
-            y: 50,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power2.out"
-        }, "-=0.5");
+        // Panels Reveal
+        if (leftPanel.value && rightPanel.value) {
+            tl.from([leftPanel.value, rightPanel.value], {
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power2.out"
+            }, "-=0.5");
 
-        // Stagger form inputs inside right panel
-        const inputs = rightPanel.value.querySelectorAll('input, select, textarea');
-        tl.from(inputs, {
-            x: 20,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: "power1.out"
-        }, "-=0.4");
-    }
+            // Stagger form inputs inside right panel
+            const inputs = rightPanel.value.querySelectorAll('input, select, textarea');
+            tl.from(inputs, {
+                x: 20,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: "power1.out",
+                clearProps: "all" // Ensure props are cleared after animation to prevent stuck states
+            }, "-=0.4");
+        }
+    });
+});
+
+onUnmounted(() => {
+    ctx?.revert();
 });
 </script>
 
@@ -105,7 +112,7 @@ onMounted(() => {
                     </div>
 
                     <!-- Social Grid -->
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
                         <a v-for="social in socials" :key="social.name" :href="social.url"
                             class="group flex h-40 flex-col justify-between rounded-3xl bg-white border border-matcha-light p-6 transition-all hover:bg-cream hover:border-primary hover:shadow-lg">
                             <div class="flex justify-between items-start">

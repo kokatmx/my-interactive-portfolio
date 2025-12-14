@@ -59,10 +59,10 @@ onMounted(() => {
                     </h2>
                 </div>
                 <div>
-                    <a class="cta-button group flex h-24 w-24 items-center justify-center rounded-full bg-primary transition-transform hover:scale-110"
+                    <a class="group flex h-24 w-24 items-center justify-center rounded-full bg-primary transition-transform hover:scale-110"
                         :href="`mailto:${email}`">
                         <span
-                            class="material-symbols-outlined text-4xl text-ink transition-transform group-hover:-rotate-45">arrow_forward</span>
+                            class="material-symbols-outlined arrow-footer text-ink transition-transform group-hover:-rotate-45">arrow_forward</span>
                     </a>
                 </div>
             </div>
@@ -77,7 +77,7 @@ onMounted(() => {
                     <div class="flex flex-col gap-2">
                         <a class="text-lg hover:text-primary transition-colors" href="#">LinkedIn</a>
                         <a class="text-lg hover:text-primary transition-colors" href="#">GitHub</a>
-                        <!-- <a class="text-lg hover:text-primary transition-colors" href="#">Twitter / X</a> -->
+                        <!-- <a class="text-lg hover:text-primary transition-colors" :href="#">Twitter / X</a> -->
                     </div>
                 </div>
                 <div class="flex flex-col gap-4">
@@ -107,3 +107,9 @@ onMounted(() => {
         </div>
     </footer>
 </template>
+
+<style scoped>
+.arrow-footer {
+    font-size: 2.25rem;
+}
+</style>

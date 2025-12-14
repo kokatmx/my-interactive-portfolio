@@ -152,10 +152,10 @@ onMounted(() => {
                             experiences powered by next-gen algorithms.
                         </p>
                         <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:justify-start justify-center">
-                            <button
+                            <a href="#selected-works"
                                 class="flex h-12 items-center justify-center rounded-xl bg-primary px-8 text-base font-bold text-ink transition-transform hover:scale-105 active:scale-95">
                                 View Selected Works
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -292,7 +292,7 @@ onMounted(() => {
         </div>
     </section>
     <!-- Selected Works (Asymmetrical Grid) -->
-    <section ref="workSection" class="py-24 px-6 md:px-12 lg:px-20 bg-white">
+    <section ref="workSection" class="py-24 px-6 md:px-12 lg:px-20 bg-white" id="selected-works">
         <div class="mx-auto max-w-[1400px]">
             <div class="flex items-center justify-between mb-16">
                 <h2 class="font-display text-4xl font-bold leading-tight text-ink md:text-5xl lg:text-6xl">
